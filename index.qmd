@@ -1,0 +1,10 @@
+---
+title: Ceci est le vrai titre
+author: Moi
+date: "2022-11-22"
+---
+
+
+# Cette page est l'index.
+
+🎉

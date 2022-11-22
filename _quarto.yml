@@ -2,17 +2,18 @@ project:
   type: website
 
 website:
-  title: "new_website"
+  title: "Projet Volant"
   navbar:
     left:
       - href: index.qmd
-        text: Home
-      - about.qmd
+        text: Accueil
+      - index.qmd
+      - href: regex.qmd
+      - href: nested/nested_file.qmd
+        text: "fichier nested"
 
 format:
   html:
-    theme: cosmo
-    css: styles.css
+    theme: darksly
+    # css: styles.css
     toc: true
-
-editor: visual
