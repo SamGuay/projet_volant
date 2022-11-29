@@ -4,10 +4,6 @@ editor:
         wrap: 72
 ---
 
-::: callout-important
-Pour télécharger le fichier: [regex.qmd](/assets/fichier/_regex.qmd)
-:::
-
 ## À la découverte des expressions régulières avec R (et d'autres packages au passage...)
 
 Les **expressions régulières** sont communément appelées **regex** ou
@@ -51,7 +47,6 @@ base_html_table <- html_elements(x = base_raw_html, css = "table")
 base_tables <- html_table(x = base_html_table)
 
 # base_table <- rbind(base_tables[[1]], base_tables[[2]], base_tables[[3]])
-
 
 names(base_tables[[3]])
 ```
@@ -169,3 +164,5 @@ x <- x %>% mutate(type_nouveau_case = case_when(type == 1 ~ "Petits aéroports",
 cat(table$exploited_by) 
 
 ```
+
+Seulement si vous en avez envie... 🙃
