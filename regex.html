@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Projet Volant – regex</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Projet Volant</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html">
+ <span class="menu-text">Accueil</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html">
+ <span class="menu-text">Ceci est le vrai titre</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./regex.html" aria-current="page">
+ <span class="menu-text">À la découverte des expressions régulières avec R (et d’autres packages au passage…)</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./nested/nested_file.html">
+ <span class="menu-text">fichier nested</span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#à-la-découverte-des-expressions-régulières-avec-r-et-dautres-packages-au-passage" id="toc-à-la-découverte-des-expressions-régulières-avec-r-et-dautres-packages-au-passage" class="nav-link active" data-scroll-target="#à-la-découverte-des-expressions-régulières-avec-r-et-dautres-packages-au-passage">À la découverte des expressions régulières avec R (et d’autres packages au passage…)</a></li>
+  <li><a href="#mission-daujourdhui" id="toc-mission-daujourdhui" class="nav-link" data-scroll-target="#mission-daujourdhui">Mission d’aujourd’hui:</a>
+  <ul class="collapse">
+  <li><a href="#début-de-solution-en-base-r" id="toc-début-de-solution-en-base-r" class="nav-link" data-scroll-target="#début-de-solution-en-base-r">Début de solution en base R</a></li>
+  </ul></li>
+  <li><a href="#solution-à-la-tidyverse" id="toc-solution-à-la-tidyverse" class="nav-link" data-scroll-target="#solution-à-la-tidyverse">Solution à la Tidyverse</a>
+  <ul class="collapse">
+  <li><a href="#remplir-les-rangées-de-la-colonne-provinceterritoire" id="toc-remplir-les-rangées-de-la-colonne-provinceterritoire" class="nav-link" data-scroll-target="#remplir-les-rangées-de-la-colonne-provinceterritoire">Remplir les rangées de la colonne <code>Province/Territoire</code></a></li>
+  </ul></li>
+  <li><a href="#recodage-des-types-daéroport" id="toc-recodage-des-types-daéroport" class="nav-link" data-scroll-target="#recodage-des-types-daéroport">Recodage des types d’aéroport</a></li>
+  <li><a href="#il-ne-reste-plus-quà-extraire-linformation-qui-se-trouve-dans-tableexploited_by" id="toc-il-ne-reste-plus-quà-extraire-linformation-qui-se-trouve-dans-tableexploited_by" class="nav-link" data-scroll-target="#il-ne-reste-plus-quà-extraire-linformation-qui-se-trouve-dans-tableexploited_by">Il ne reste plus qu’à extraire l’information qui se trouve dans <code>table$exploited_by</code></a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+
+<section id="à-la-découverte-des-expressions-régulières-avec-r-et-dautres-packages-au-passage" class="level2">
+<h2 class="anchored" data-anchor-id="à-la-découverte-des-expressions-régulières-avec-r-et-dautres-packages-au-passage">À la découverte des expressions régulières avec R (et d’autres packages au passage…)</h2>
+<p>Les <strong>expressions régulières</strong> sont communément appelées <strong>regex</strong> ou <strong>regexp</strong> pour <strong>regular expressions</strong> en anglais. Selon Wikipédia, une expression régulière est “une chaîne de caractères, qui décrit, selon une syntaxe précise, un ensemble de chaînes de caractères possibles”. Si vous n’avez jamais entendu parlé des regex, il se peut que cette définition ne vous aide pas à comprendre le concept. Nous tenterons de démystifier le tout au cours de ces exercices.</p>
+<p>À titre de rappel, cet <a href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/translations/french/regex_fr.pdf">aide-mémoire</a> vous sera drôlement utile!</p>
+<p>En résumé, ces expressions permettent de décrire des motifs (patterns) à l’aide de formules “<em>relativement simples</em>” pour trouver, valider, extraire ou modifier du texte ou des nombres.</p>
+</section>
+<section id="mission-daujourdhui" class="level2">
+<h2 class="anchored" data-anchor-id="mission-daujourdhui">Mission d’aujourd’hui:</h2>
+<p>Récolter le plus d’information possible qui se trouve dans les tableaux de la page suivante: <a href="https://tc.canada.ca/fr/aviation/exploitation-aeroports-aerodromes/liste-aeroports-appartenant-transports-canada" class="uri">https://tc.canada.ca/fr/aviation/exploitation-aeroports-aerodromes/liste-aeroports-appartenant-transports-canada</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>✔ ggplot2 3.3.6     ✔ purrr   0.3.4
+✔ tibble  3.1.7     ✔ dplyr   1.0.9
+✔ tidyr   1.2.0     ✔ stringr 1.4.0
+✔ readr   2.1.2     ✔ forcats 0.5.1</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'magrittr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:purrr':
+
+    set_names</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:tidyr':
+
+    extract</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rvest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'rvest'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:readr':
+
+    guess_encoding</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>URL <span class="ot">&lt;-</span> <span class="st">"https://tc.canada.ca/fr/aviation/exploitation-aeroports-aerodromes/liste-aeroports-appartenant-transports-canada"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="début-de-solution-en-base-r" class="level3">
+<h3 class="anchored" data-anchor-id="début-de-solution-en-base-r">Début de solution en base R</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>base_raw_html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(<span class="at">x =</span> URL)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>base_html_table <span class="ot">&lt;-</span> <span class="fu">html_elements</span>(<span class="at">x =</span> base_raw_html, <span class="at">css =</span> <span class="st">"table"</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>base_tables <span class="ot">&lt;-</span> <span class="fu">html_table</span>(<span class="at">x =</span> base_html_table)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co"># base_table &lt;- rbind(base_tables[[1]], base_tables[[2]], base_tables[[3]])</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(base_tables[[<span class="dv">3</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Territoire"   "Aéroport"     "Exploité par"</code></pre>
+</div>
+</div>
+<p>⚠️ Erreur! Une colonne n’est pas nommée de façon identique, donc ne fonctionne pas… Corrigeons la situation</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(base_tables[[<span class="dv">3</span>]])[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">"Province/Territoire"</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>base_table <span class="ot">&lt;-</span> <span class="fu">rbind</span>(base_tables[[<span class="dv">1</span>]], base_tables[[<span class="dv">2</span>]], base_tables[[<span class="dv">3</span>]])</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>base_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 44 × 3
+   `Province/Territoire`  Aéroport                `Exploité par`                
+   &lt;chr&gt;                  &lt;chr&gt;                   &lt;chr&gt;                         
+ 1 "Colombie-Britannique" Penticton               "Transports Canada\n\t\t\t#10…
+ 2 ""                     Port Hardy              "Transports Canada\n\t\t\tC.P…
+ 3 ""                     Sandspit                "Transports Canada\n\t\t\tC.P…
+ 4 ""                     Havre de Victoria       "Transports Canada\n\t\t\t12,…
+ 5 "Manitoba"             Churchill               "Transports Canada\n\t\t\tC.P…
+ 6 "Québec"               Chevery                 "Municipalité de la Côte-Nord…
+ 7 ""                     Lourdes-de-Blanc-Sablon "Transports Canada\n\t\t\tAir…
+ 8 ""                     Sept-Îles               "Transports Canada\n\t\t\t100…
+ 9 ""                     Natashquan              "Municipalité de Natashquan\n…
+10 ""                     Eastmain River          "Transports Canada\n\t\t\ta/s…
+# … with 34 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Solution en Base R</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>base_table<span class="sc">$</span><span class="st">`</span><span class="at">Province/Territoire</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="at">test =</span> <span class="fu">is.na</span>(base_table<span class="sc">$</span><span class="st">`</span><span class="at">Province/Territoire</span><span class="st">`</span>),</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">yes =</span> base_table<span class="sc">$</span>Territoire, <span class="at">no =</span> base_table<span class="sc">$</span><span class="st">`</span><span class="at">Province/Territoire</span><span class="st">`</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>base_table<span class="sc">$</span>Territoire <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list=</span>(<span class="fu">ls</span>(<span class="at">pattern =</span> <span class="st">"base*"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="solution-à-la-tidyverse" class="level2">
+<h2 class="anchored" data-anchor-id="solution-à-la-tidyverse">Solution à la Tidyverse</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>URL <span class="ot">&lt;-</span> <span class="st">"https://tc.canada.ca/fr/aviation/exploitation-aeroports-aerodromes/liste-aeroports-appartenant-transports-canada"</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>tables <span class="ot">&lt;-</span> <span class="fu">read_html</span>(<span class="at">x =</span> URL) <span class="sc">%&gt;%</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html_elements</span>(<span class="at">css =</span> <span class="st">"table"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html_table</span>()</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>table <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">bind_rows</span>(tables[[<span class="dv">1</span>]],</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>                          tables[[<span class="dv">2</span>]],</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>                          tables[[<span class="dv">3</span>]],</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>                          <span class="at">.id =</span> <span class="st">"type"</span>)</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="co"># ou solution alternative équivalente</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>tables <span class="sc">%&gt;%</span> purrr<span class="sc">::</span><span class="fu">map_dfr</span>(bind_rows, <span class="at">.id =</span> <span class="st">"type"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 44 × 5
+   type  `Province/Territoire`  Aéroport               `Exploité par` Territoire
+   &lt;chr&gt; &lt;chr&gt;                  &lt;chr&gt;                  &lt;chr&gt;          &lt;chr&gt;     
+ 1 1     "Colombie-Britannique" Penticton              "Transports C… &lt;NA&gt;      
+ 2 1     ""                     Port Hardy             "Transports C… &lt;NA&gt;      
+ 3 1     ""                     Sandspit               "Transports C… &lt;NA&gt;      
+ 4 1     ""                     Havre de Victoria      "Transports C… &lt;NA&gt;      
+ 5 1     "Manitoba"             Churchill              "Transports C… &lt;NA&gt;      
+ 6 1     "Québec"               Chevery                "Municipalité… &lt;NA&gt;      
+ 7 1     ""                     Lourdes-de-Blanc-Sabl… "Transports C… &lt;NA&gt;      
+ 8 1     ""                     Sept-Îles              "Transports C… &lt;NA&gt;      
+ 9 1     ""                     Natashquan             "Municipalité… &lt;NA&gt;      
+10 1     ""                     Eastmain River         "Transports C… &lt;NA&gt;      
+# … with 34 more rows</code></pre>
+</div>
+</div>
+<section id="remplir-les-rangées-de-la-colonne-provinceterritoire" class="level3">
+<h3 class="anchored" data-anchor-id="remplir-les-rangées-de-la-colonne-provinceterritoire">Remplir les rangées de la colonne <code>Province/Territoire</code></h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>table <span class="ot">&lt;-</span> table <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">province_territoire =</span> <span class="st">`</span><span class="at">Province/Territoire</span><span class="st">`</span>,</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                        <span class="at">aeroport =</span> Aéroport,</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">exploited_by =</span> <span class="st">`</span><span class="at">Exploité par</span><span class="st">`</span>,</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">territoire =</span> Territoire)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>table<span class="sc">$</span>province_territoire <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">coalesce</span>(table<span class="sc">$</span>province_territoire, </span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>                                              table<span class="sc">$</span>territoire)</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>table[table <span class="sc">==</span> <span class="st">""</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="co"># equivalent en tidyverse</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>table<span class="sc">$</span>province_territoire <span class="ot">&lt;-</span> table<span class="sc">$</span>province_territoire <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">na_if</span>(<span class="at">y =</span> <span class="st">""</span>)</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>table <span class="ot">&lt;-</span> table <span class="sc">%&gt;%</span> tidyr<span class="sc">::</span><span class="fu">fill</span>(province_territoire, <span class="at">.direction =</span> <span class="st">"down"</span>)</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="co"># fill(x)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>table <span class="ot">&lt;-</span> table <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>territoire)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Extraction des codes d’aéroports</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># solution #1</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> table <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">new_col =</span> <span class="fu">str_extract</span>(<span class="at">string =</span> aeroport, <span class="at">pattern =</span> <span class="st">"[A-Z]{3}"</span>))</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>table <span class="ot">&lt;-</span> table <span class="sc">%&gt;%</span> tidyr<span class="sc">::</span><span class="fu">extract</span>(<span class="at">col =</span> aeroport,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>                         <span class="at">into =</span> <span class="st">"code_aeroport"</span>,</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>                         <span class="at">regex =</span> <span class="st">"(Y[A-Z][A-Z])"</span>, </span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>                         <span class="at">remove =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>table<span class="sc">$</span>aeroport <span class="ot">&lt;-</span> table<span class="sc">$</span>aeroport <span class="sc">%&gt;%</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    stringr<span class="sc">::</span><span class="fu">str_remove_all</span>(<span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">(.*</span><span class="sc">\\</span><span class="st">)"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    stringr<span class="sc">::</span><span class="fu">str_squish</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="recodage-des-types-daéroport" class="level2">
+<h2 class="anchored" data-anchor-id="recodage-des-types-daéroport">Recodage des types d’aéroport</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> table <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">type_nouveau =</span> <span class="fu">recode</span>(type,</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>                                            <span class="st">"1"</span> <span class="ot">=</span> <span class="st">"Petits aéroports"</span>,</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>                                            <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"Aéroports nationaux"</span>, </span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>                                            <span class="st">"3"</span> <span class="ot">=</span> <span class="st">"Aéroports nationaux exploités par des administrations territoriales"</span>))</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> x <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">type_nouveau_case =</span> <span class="fu">case_when</span>(type <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"Petits aéroports"</span>, </span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>                                               type <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> <span class="st">"Aéroports nationaux"</span>,</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>                                               type <span class="sc">==</span> <span class="dv">3</span> <span class="sc">~</span> <span class="st">"Aéroports nationaux exploités par des administrations territoriales"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="il-ne-reste-plus-quà-extraire-linformation-qui-se-trouve-dans-tableexploited_by" class="level2">
+<h2 class="anchored" data-anchor-id="il-ne-reste-plus-quà-extraire-linformation-qui-se-trouve-dans-tableexploited_by">Il ne reste plus qu’à extraire l’information qui se trouve dans <code>table$exploited_by</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(table<span class="sc">$</span>exploited_by) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Transports Canada
+            #109-3000 Airport Road
+            Penticton (Colombie-Britannique)&nbsp; V2A 8X1
+            250-770-4414 Transports Canada
+            C.P. 460
+            3675 Byng Road
+            Port Hardy (Colombie-Britannique)&nbsp; V0N 2P0
+            250-949-6424 Transports Canada
+            C.P. 439
+            Sandspit (Colombie-Britannique)&nbsp; V0T 1T0
+            250-637-1149 Transports Canada
+            12, rue Erie
+            Victoria (Colombie-Britannique)&nbsp; V8V 1Y4
+            250-363-3578 Transports Canada
+            C.P. 1059
+            Churchill (Manitoba)&nbsp; R0B 0E0
+            204-675-8868 Municipalité de la Côte-Nord-du Golfe-du Saint-Laurent
+            Chevery (Québec)&nbsp; G0G 1G0
+            418-787-2215 Transports Canada
+            Airport Road
+            Lourdes-de-Blanc-Sablon (Québec)&nbsp; G0G&nbsp;1W0
+            418-461-2514 Transports Canada
+            1000, boul. Laure Est
+            C.P. 2001
+            Sept-Îles (Québec)&nbsp; G4R 4K2
+            418-962-8211 Municipalité de Natashquan
+            Airport Road
+            Natashquan (Québec)&nbsp; G0G 2E0
+            418-726-3273 Transports Canada
+            a/s du conseil de bande
+            Eastmain (Québec)&nbsp; J0M 1W0
+            819-977-0333 Transports Canada
+            1550 B, route de l'Aéroport
+            Havre-Saint-Pierre (Québec)
+            G0G 1P0
+            418-538-0627 Transports Canada
+            1-210, chemin de l’Aéroport
+            Havre-aux-Maisons (Québec)
+            G4T 5L2
+            418-969-2180 Transports Canada
+            a/s du conseil de bande
+            Waskaganish (Québec)&nbsp; J0M 1R0
+            819-895-8925 Administration régionale Kativik
+            C.P. 9
+            Kuujjuaq (Québec)&nbsp; J0M 1C0
+            819-964-2968 Société aéroportuaire de Schefferville
+            78 Atlantic Road
+            Schefferville (Québec)&nbsp;&nbsp;G0G 2T0
+            418-585-3544 Transports Canada
+            a/s du conseil de bande
+            Wemindji (Québec)&nbsp;&nbsp;J0M 1L0
+            819-978-3936 Transports Canada
+            2 Airport Road
+            Wabush (Terre-Neuve)&nbsp;&nbsp;A0R 1B0
+            709-282-5412 Transports Canada
+            1 Airport Road
+            St. Anthony (Terre-Neuve)&nbsp;&nbsp;A0K 4S0
+            709-454-3192 Administration aéroportuaire de Victoria Administration de l’aéroport international de Vancouver Administration aéroportuaire de Prince George Inc. (en anglais seulement) Ville de Kelowna (en anglais seulement) Administration des aéroports régionaux d’Edmonton (en anglais seulement) Administration aéroportuaire de Calgary (en anglais seulement) Administration aéroportuaire de Saskatoon (en anglais seulement) Administration aéroportuaire de Regina Administration aéroportuaire de Winnipeg Inc. Administration de l’aéroport international de Thunder Bay Inc. (en anglais seulement) Administration de l’aéroport international du Grand London (en anglais seulement) Autorité aéroportuaire du Grand Toronto Administration de l’aéroport international Macdonald-Cartier d'Ottawa Aéroports de Montréal Aéroports de Montréal Aéroport de Québec Inc. Administration de l’aéroport international de Fredericton Administration de l’aéroport international du Grand Moncton Inc. Aéroport de Saint John Inc. Administration de l’aéroport de Charlottetown Inc. (en anglais seulement) Administration de l’aéroport international de Halifax Administration de l’aéroport international de Gander Inc. (en anglais seulement) Administration de l’aéroport international de St. John’s Gouvernement des Territoires du Nord-Ouest Gouvernement du Nunavut Gouvernement du Yukon</code></pre>
+</div>
+</div>
+<p>Seulement si vous en avez envie… 🙃</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
